@@ -28,7 +28,6 @@ var userType = Mule::p("user.type." ++ vars.inputPayload.user_type)
 	(user_type, email_address, username)
 VALUES
 	(:userType, :emailAddress, :username)
-RETURNING id
 ]]></db:sql>
 			<db:input-parameters ><![CDATA[#[vars.dbInput]]]></db:input-parameters>
 			<db:auto-generated-keys-column-names >
@@ -46,5 +45,45 @@ payload]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
 		<error-handler ref="client-exceptions-strategy" />
+	</flow>
+	<flow name="db:update-user-flow" doc:id="06132ef2-07d6-411c-b98d-d01496947cf6" >
+		<ee:transform doc:name="Set query params" doc:id="8cf4930b-fd75-4cb6-ba7e-ab9fef4e2c9a" >
+			<ee:message />
+			<ee:variables >
+				<ee:set-variable variableName="setParams" ><![CDATA[%dw 2.0
+output application/java
+
+---
+{
+	email_address: vars.inputPayload.email_address,
+	username: vars.inputPayload.username
+} filterObject not isEmpty($)]]></ee:set-variable>
+				<ee:set-variable variableName="whereParams" ><![CDATA[%dw 2.0
+output application/java
+
+var userType = vars.userId[0]
+var userNumber = vars.userId[1 to -1]
+---
+{
+	id: userNumber,
+	user_type: userType
+} filterObject not isEmpty($)]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<db:update doc:name="Update user in db" doc:id="04698697-f0db-4a73-b293-589a820449ca" config-ref="Database_Config">
+			<db:sql ><![CDATA[#[import dynamicUpdateQuery from dw::sql --- dynamicUpdateQuery("users", vars.setParams, vars.whereParams)]]]></db:sql>
+			<db:input-parameters ><![CDATA[#[vars.setParams ++ vars.whereParams]]]></db:input-parameters>
+			<db:auto-generated-keys-column-names >
+			</db:auto-generated-keys-column-names>
+		</db:update>
+		<ee:transform doc:name="Save db response" doc:id="4c931aa3-0914-44f4-a9d0-d8dd9b8d3ea7" >
+			<ee:message />
+			<ee:variables >
+				<ee:set-variable variableName="dbResponse" ><![CDATA[%dw 2.0
+output application/java
+---
+payload]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
 	</flow>
 </mule>

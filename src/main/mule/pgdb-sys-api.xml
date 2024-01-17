@@ -17,4 +17,7 @@
 	<flow name="post:\users:application\json:api-config" doc:id="4cc6b3fc-a4a6-4c96-85eb-068d7ac53f10" >
 		<flow-ref doc:name="Ref to post-create-user-handler-subflow" doc:id="7198a0a9-dce6-4091-bffe-25bf09e0193f" name="post-create-user-handler-subflow"/>
 	</flow>
+	<flow name="patch:\users\(user_id):application\json:api-config" doc:id="154c57e3-63b0-4ed4-be69-5fb32e5c05eb" >
+		<flow-ref doc:name="Ref to patch-update-user-handler-subflow" doc:id="ca4b99f1-6dcd-4e65-8600-b6c47a985c70" name="patch-update-user-handler-subflow" />
+	</flow>
 </mule>
