@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+
+	<flow name="db:create-user-flow" doc:id="16e35dcb-b4fb-45d5-912c-4b2ddb8935c6" >
+		<ee:transform doc:name="Set database input" doc:id="fe8aa882-167c-45f5-ae81-7682f9303134" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="dbInput" ><![CDATA[%dw 2.0
+output application/java
+
+var userType = Mule::p("user.type." ++ vars.inputPayload.user_type)
+---
+{
+	userType: userType,
+	emailAddress: vars.inputPayload.email_address,
+	username: vars.inputPayload.username
+}]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<db:insert doc:name="Insert user to db" doc:id="18e26624-4f3d-4f0d-bcc0-35345710121d" config-ref="Database_Config" autoGenerateKeys="true">
+			<db:sql ><![CDATA[INSERT INTO users
+	(user_type, email_address, username)
+VALUES
+	(:userType, :emailAddress, :username)
+RETURNING id
+]]></db:sql>
+			<db:input-parameters ><![CDATA[#[vars.dbInput]]]></db:input-parameters>
+			<db:auto-generated-keys-column-names >
+				<db:auto-generated-keys-column-name value="id" />
+			</db:auto-generated-keys-column-names>
+		</db:insert>
+		<ee:transform doc:name="Save db response" doc:id="dec682f5-74b7-4af8-94ed-4b6364e0c88d" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="dbResponse" ><![CDATA[%dw 2.0
+output application/java
+---
+payload]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<error-handler ref="client-exceptions-strategy" />
+	</flow>
+</mule>

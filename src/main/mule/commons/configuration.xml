@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:secure-properties="http://www.mulesoft.org/schema/mule/secure-properties"
+<mule xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns:secure-properties="http://www.mulesoft.org/schema/mule/secure-properties"
 	xmlns:tls="http://www.mulesoft.org/schema/mule/tls"
 	xmlns:api-gateway="http://www.mulesoft.org/schema/mule/api-gateway"
 	xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit"
 	xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
 	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd 
 http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd 
 http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/mule/api-gateway/current/mule-api-gateway.xsd 
 http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd 
@@ -16,8 +18,8 @@ http://www.mulesoft.org/schema/mule/secure-properties http://www.mulesoft.org/sc
 	<http:listener-config name="httpListenerConfig">
         <http:listener-connection host="${https.host}" port="${https.port}" readTimeout="${https.timeout}" tlsContext="TLS_Context" protocol="HTTPS"/>
     </http:listener-config>
-    <apikit:config name="api-config" api="user_auth_ddb-sys-api.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
-	<api-gateway:autodiscovery apiId="${api.instanceId}" ignoreBasePath="true" doc:name="API Autodiscovery" doc:id="696e4232-777c-40d2-9c5f-7b9a29f3433f" flowRef="user_auth_ddb-sys-api-main" />
+    <apikit:config name="api-config" api="pgdb-sys-api.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
+	<api-gateway:autodiscovery apiId="${api.instanceId}" ignoreBasePath="true" doc:name="API Autodiscovery" doc:id="696e4232-777c-40d2-9c5f-7b9a29f3433f" flowRef="pgdb-sys-api-main" />
 	
 	<configuration-properties doc:name="Configuration properties" doc:id="6b2ef9e6-78cc-4d5a-9986-f246a526198e" file="mule-app.yaml" />
 	<secure-properties:config name="Secure_Properties_Config" doc:name="Secure Properties Config" doc:id="79f0b21d-6cd3-443b-a566-95c107db66eb" file="mule-app-secure.yaml" key="${vault.key}" >
@@ -29,7 +31,12 @@ http://www.mulesoft.org/schema/mule/secure-properties http://www.mulesoft.org/sc
 	</tls:context>
 
 	<import doc:name="Import error-handling" doc:id="abb60953-fa0f-49f8-9a64-0da099c2647f" file="error-handling.xml" />
+	<import doc:name="Import client-exceptions-strategy" doc:id="72039330-d4d0-4b7a-9dc0-f3543801b1e8" file="client-exceptions-strategy.xml" />
 	<!-- PAGINATION MODULE -->
 	<import doc:name="Import pagination" doc:id="7f3bb676-8fa0-4877-aea3-c575c546fb10" file="pagination.xml" />
+	
+	<db:config name="Database_Config" doc:name="Database Config" doc:id="8d4a25a0-5d45-4f6c-b154-afeb8647acb4" >
+		<db:generic-connection driverClassName="org.postgresql.Driver" url="jdbc:postgresql://${db.host}:${db.port}/${db.database}" user="${secure::db.username}" password="${secure::db.password}"/>
+	</db:config>
 	
 </mule>

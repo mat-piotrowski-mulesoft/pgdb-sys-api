@@ -3,11 +3,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.itsnooge.mule.app</groupId>
-	<artifactId>mule-template-api</artifactId>
+	<artifactId>pgdb-sys-api</artifactId>
 	<version>1.0.0-SNAPSHOT</version>
 	<packaging>mule-application</packaging>
 
-	<name>mule-template-api</name>
+	<name>pgdb-sys-api</name>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -15,7 +15,7 @@
 
 		<app.runtime>4.5</app.runtime>
 		<mule.maven.plugin.version>4.0.0</mule.maven.plugin.version>
-		<common-standard-library.version>1.0.1</common-standard-library.version>
+		<common-standard-library.version>1.0.0-SNAPSHOT-2</common-standard-library.version>
 	</properties>
 
 	<build>
@@ -52,6 +52,12 @@
 						<!-- End: SECURED PROPERTIES CI/CD -->
 					</cloudHubDeployment>
 					<classifier>mule-application</classifier>
+					<sharedLibraries>
+						<sharedLibrary>
+							<groupId>org.postgresql</groupId>
+							<artifactId>postgresql</artifactId>
+						</sharedLibrary>
+					</sharedLibraries>
 				</configuration>
 			</plugin>
 		</plugins>
@@ -77,7 +83,7 @@
 			<classifier>mule-plugin</classifier>
 		</dependency>
 		<dependency>
-			<groupId>com.itsnooge</groupId>
+			<groupId>com.itsnooge.mule.module</groupId>
 			<artifactId>common-standard-library</artifactId>
 			<version>${common-standard-library.version}</version>
 			<classifier>mule-plugin</classifier>
@@ -86,6 +92,23 @@
 			<groupId>com.mulesoft.modules</groupId>
 			<artifactId>mule-secure-configuration-property-module</artifactId>
 			<version>1.2.6</version>
+			<classifier>mule-plugin</classifier>
+		</dependency>
+		<dependency>
+			<groupId>org.mule.connectors</groupId>
+			<artifactId>mule-db-connector</artifactId>
+			<version>1.14.6</version>
+			<classifier>mule-plugin</classifier>
+		</dependency>
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<version>42.2.22</version>
+		</dependency>
+		<dependency>
+			<groupId>org.mule.modules</groupId>
+			<artifactId>mule-validation-module</artifactId>
+			<version>2.0.5</version>
 			<classifier>mule-plugin</classifier>
 		</dependency>
 	</dependencies>

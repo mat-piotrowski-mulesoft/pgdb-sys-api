@@ -1,0 +1,202 @@
+#%RAML 1.0
+title: pgdb-sys-api
+description: API connected with PostgreSQL DB to manage data
+
+version: v1
+baseUri: /api/v1/pgdb
+protocols:
+  - HTTPS
+
+uses:
+  security-library: exchange_modules/46a3d09d-1bf1-4bb2-8902-b31080f34dab/security-library/1.0.3/security-library.raml
+  pagination-library: exchange_modules/46a3d09d-1bf1-4bb2-8902-b31080f34dab/pagination-library/1.0.1/pagination-library.raml
+
+traits:
+  errors: !include exchange_modules/46a3d09d-1bf1-4bb2-8902-b31080f34dab/error-response-trait/1.0.0/error-response-trait.raml
+
+types:
+  create-user-body: !include types/create_user_body_type.raml
+  save-user-response: !include types/save_user_response_type.raml
+  update-user-body: !include types/update_user_body_type.raml
+  create-project-body: !include types/create-project-body-type.raml
+  save-project-response: !include types/save-project-response-type.raml
+  get-projects-response: !include types/get-projects-type.raml
+  get-project-details-response: !include types/get-project-details-type.raml
+  update-project-body: !include types/update-project-body-type.raml
+  create-env-body: !include types/create-env-body-type.raml
+  save-env-response: !include types/save-env-response-type.raml
+  update-env-body: !include types/update-env-body-type.raml
+  add-users-to-project-body: !include types/add-users-to-project-body-type.raml
+  save-users-to-project-response: !include types/save-users-to-project-response-type.raml
+  update-project-user-body: !include types/update-project-user-body-type.raml
+
+/users:
+  is:
+    - security-library.client-id-sec-headers
+    - errors
+  post:
+    description: Add user entity do database
+    body:
+      application/json:
+        type: create-user-body
+    responses:
+      201:
+        body:
+          application/json:
+            type: save-user-response
+  
+  /{user_id}:
+    is:
+      - security-library.auth-headers
+    uriParameters:
+      user_id:
+        description: Id of the user
+        type: string
+        minLength: 2
+        example: "C422"
+    patch:
+      description: Update user information
+      body:
+        application/json:
+          type: update-user-body
+      responses:
+        200:
+          body:
+            application/json:
+              type: save-user-response
+  
+/projects:
+  is:
+    - security-library.client-id-sec-headers
+    - security-library.auth-headers
+    - errors
+  post:
+    description: Create a new project in database
+    body:
+      application/json:
+        type: create-project-body
+    responses:
+      201:
+        body:
+          application/json:
+            type: save-project-response
+  get:
+    description: Get projects list from database
+    is:
+      - pagination-library.pagination-queries
+    queryParameters:
+      user_id:
+        description: Id of the user
+        required: false
+        type: integer
+        minimum: 1
+        example: 10011101
+    responses:
+      200:
+        body:
+          application/json:
+            type: get-projects-response
+
+  /{project_id}:
+    uriParameters:
+      project_id:
+        description: Id of the project
+        type: integer
+        minimum: 1
+        example: 1231151
+    get:
+      description: Get project details with provided id from the database
+      responses:
+        200:
+          body:
+            application/json:
+              type: get-project-details-response
+    patch:
+      description: Update project information
+      body:
+        application/json:
+          type: update-project-body
+      responses:
+        200:
+          body:
+            application/json:
+              type: save-project-response
+    delete:
+      description: Delete existing project and all dependencies from database
+      responses:
+        200:
+          body:
+            application/json:
+              type: save-project-response
+
+    /envs:
+      post:
+        description: Add environment to the project
+        body:
+          application/json:
+            type: create-env-body
+        responses:
+          201:
+            body:
+              application/json:
+                type: save-env-response
+      /{env_id}:
+        uriParameters:
+          env_id:
+            description: Id of the environment
+            type: integer
+            minimum: 1
+            example: 1231151
+        patch:
+          description: Update environment information
+          body:
+            application/json:
+              type: update-env-body
+          responses:
+            200:
+              body:
+                application/json:
+                  type: save-env-response
+        delete:
+          description: Delete existing environment from database
+          responses:
+            200:
+              body:
+                application/json:
+                  type: save-env-response
+
+    /users:
+      post:
+        description: Add user to the project
+        body:
+          application/json:
+            type: add-users-to-project-body
+        responses:
+          201:
+            body:
+              application/json:
+                type: save-users-to-project-response
+      /{user_id}:
+        uriParameters:
+          user_id:
+            description: Id of the user
+            type: integer
+            minimum: 1
+            example: 1231151
+        patch:
+          description: Update project user information
+          body:
+            application/json:
+              type: update-project-user-body
+          responses:
+            200:
+              body:
+                application/json:
+                  type: save-user-response
+        delete:
+          description: Delete existing user from the project
+          responses:
+            200:
+              body:
+                application/json:
+                  type: save-user-response

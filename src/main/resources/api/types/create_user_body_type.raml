@@ -1,0 +1,8 @@
+#%RAML 1.0 DataType
+
+type: object
+properties:
+  email_address: string
+  username: string
+  user_type: !include user-type.raml
+example: !include ../examples/create-user-body-example.raml
