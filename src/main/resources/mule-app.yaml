@@ -1,0 +1,20 @@
+api:
+  layer: "API_LAYER -> S - system, P - process, E - experience"
+  error:
+    code: "API_ERROR_CODE"
+  instanceId: "0"
+  
+jks:
+  path: "tls/itsnooge-cms-keys.jks"
+  alias: "mule_itsnooge_cms_rs256"
+  
+https:
+  host: "0.0.0.0"
+  port: "8082"
+  timeout: "30000"
+
+# Properties used with pagination module
+pagination:
+  limit:
+    default: "PAGINATION_LIMIT_DEFAULT_VALUE"
+    max: "PAGINATION_LIMIT_MAXIMUM_VALUE"
