@@ -27,9 +27,12 @@ payload]]></ee:set-variable>
 			<ee:message >
 				<ee:set-payload ><![CDATA[%dw 2.0
 output application/json
+
+var userType = Mule::p("user.type." ++ vars.inputPayload.user_type)
+var userNumber = vars.dbResponse.generatedKeys.id
 ---
 {
-	id: vars.dbResponse.generatedKeys.id
+	id: userType ++ userNumber
 }]]></ee:set-payload>
 			</ee:message>
 			<ee:variables >
