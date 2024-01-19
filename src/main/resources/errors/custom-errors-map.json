@@ -1,1 +1,8 @@
-{}
+{
+	"PGDB-S-00001": {
+	    "code": "PGDB-S-00001",
+	    "message": "Bad Request",
+	    "description": "Any rows in database was not affected",
+	    "responseCode": 500
+	}
+}

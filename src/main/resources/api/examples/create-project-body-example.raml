@@ -1,0 +1,28 @@
+#%RAML 1.0 NamedExample
+
+name: "Sample project"
+repostory: "https://github.com/organization/repository"
+repository_global_user: "sample_user"
+repository_global_token: "ghp_WnS1O7FMQESDOT8JaXZ4Wro43JuMBbSCokLz"
+users:
+  - id: "C3463643"
+    relation_type: "DEVELOPER"
+    repository_user: "developer_1"
+    repository_token: "ghp_WnS1O7FMQESDOT8JaXZ4Wro43JuMBbSCokLz"
+  - id: "C5457444"
+    relation_type: "DEVELOPER"
+    repository_user: "developer_2"
+    repository_token: "ghp_WnS1O7FMQESDOT8JaXZ4Wro43JuMBbSCokLz"
+  - id: "C3463333"
+    relation_type: "CUSTOMER"
+envs:
+    - name: "DEV"
+      branch: "development"
+      access: "DEVELOPER"
+    - name: "CC"
+      branch: "customer-content"
+      access: "CUSTOMER"
+    - name: "PROD"
+      branch: "master"
+      access: "OWNER"
+

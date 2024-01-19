@@ -1,0 +1,19 @@
+#%RAML 1.0 DataType
+
+type: object
+properties:
+  data:
+    type: array
+    items:
+      type: object
+      properties:
+        id: integer
+        name: string
+        owner:
+          type: object
+          properties:
+            id: string
+            username: string
+            email_address: string
+    example: !include ../examples/get-projects-data-example.raml 
+  links: !include exchange_modules/46a3d09d-1bf1-4bb2-8902-b31080f34dab/pagination-library/1.0.1/types/pagination-links-type.raml

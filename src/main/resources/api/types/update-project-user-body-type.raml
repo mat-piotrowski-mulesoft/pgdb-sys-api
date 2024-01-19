@@ -1,0 +1,8 @@
+#%RAML 1.0 DataType
+
+type: object
+properties:
+  relation_type?: !include relation-type.raml
+  repository_user?: string
+  repository_token?: string
+example: !include ../examples/update-project-user-body-example.raml

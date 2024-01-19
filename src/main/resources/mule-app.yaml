@@ -1,8 +1,8 @@
 api:
-  layer: "API_LAYER -> S - system, P - process, E - experience"
+  layer: "S"
   error:
-    code: "API_ERROR_CODE"
-  instanceId: "0"
+    code: "PGDB"
+  instanceId: "19245259"
   
 jks:
   path: "tls/itsnooge-cms-keys.jks"
@@ -16,5 +16,15 @@ https:
 # Properties used with pagination module
 pagination:
   limit:
-    default: "PAGINATION_LIMIT_DEFAULT_VALUE"
-    max: "PAGINATION_LIMIT_MAXIMUM_VALUE"
+    default: "20"
+    max: "40"
+    
+user:
+  type:
+    CLIENT: "C"
+    OWNER: "O"
+    
+db:
+  host: "db.zucoqlkksnkxatlgvhuz.supabase.co"
+  port: "5432"
+  database: "postgres"

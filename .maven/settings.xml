@@ -17,7 +17,7 @@
         <password>${nexus_password}</password>
     </server>
 	<server>
-      <id>github</id>
+      <id>github-public</id>
       <username>mat-piotrowski</username>
       <password>${GITHUB_TOKEN}</password>
     </server>
@@ -46,7 +46,7 @@
     </profile>
 	
 	<profile>
-      <id>github</id>
+      <id>github-publiic</id>
       <repositories>
         <repository>
           <id>central</id>
@@ -54,7 +54,7 @@
         </repository>
         <repository>
           <id>github</id>
-          <url>https://maven.pkg.github.com/mat-piotrowski-mulesoft/maven-repository</url>
+          <url>https://maven.pkg.github.com/mat-piotrowski-mulesoft/maven-repository-public</url>
           <snapshots>
             <enabled>true</enabled>
           </snapshots>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:validation="http://www.mulesoft.org/schema/mule/validation" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/validation http://www.mulesoft.org/schema/mule/validation/current/mule-validation.xsd">
+	<sub-flow name="post-create-user-handler-subflow" doc:id="58136bc7-35c8-4061-97ec-ceffeecb14a3" >
+		<ee:transform doc:name="Save payload" doc:id="9e236d19-3f1a-455a-bffe-063109f6655e" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="inputPayload" ><![CDATA[%dw 2.0
+output application/java
+---
+payload]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<flow-ref doc:name="Ref to db:create-user-flow" doc:id="35a8d34e-bdf5-4bf1-b388-ac3e5d51ea5f" name="db:create-user-flow"/>
+		<validation:is-null doc:name="Databse exception validation" doc:id="316757fe-3ee1-480a-8c51-2eee6ff50ad4" value="#[vars.exceptionMessage]" message="#[vars.exceptionMessage]">
+			<error-mapping targetType="APP:CLIENT_EXCEPTION" />
+		</validation:is-null>
+		<validation:is-true doc:name="Affected rows validation" doc:id="4f180a7a-4621-4199-9527-ffd6211e4645" expression="#[vars.dbResponse.affectedRows == 1]" message="PGDB-S-00001">
+			<error-mapping targetType="APP:EXCEPTION_HANDLING" />
+		</validation:is-true>
+		<ee:transform doc:name="Set response" doc:id="07675094-9ad6-440d-95dd-b13a1e1047e1" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+
+var userType = Mule::p("user.type." ++ vars.inputPayload.user_type)
+var userNumber = vars.dbResponse.generatedKeys.id
+---
+{
+	id: userType ++ userNumber
+}]]></ee:set-payload>
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="httpStatus" ><![CDATA[%dw 2.0
+output application/java
+---
+201]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+	</sub-flow>
+</mule>

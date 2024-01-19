@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd ">
     
-    <flow name="user_auth_ddb-sys-api-main">
-        <http:listener config-ref="httpListenerConfig" path="/api/v1/auth/credentials/*">
+    <flow name="pgdb-sys-api-main">
+        <http:listener config-ref="httpListenerConfig" path="/api/v1/pgdb/*">
             <http:response statusCode="#[vars.httpStatus default 200]">
                 <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
             </http:response>
@@ -14,4 +14,10 @@
         <apikit:router config-ref="api-config" />
 		<error-handler ref="api-exception-strategy" />
     </flow>
+	<flow name="post:\users:application\json:api-config" doc:id="4cc6b3fc-a4a6-4c96-85eb-068d7ac53f10" >
+		<flow-ref doc:name="Ref to post-create-user-handler-subflow" doc:id="7198a0a9-dce6-4091-bffe-25bf09e0193f" name="post-create-user-handler-subflow"/>
+	</flow>
+	<flow name="patch:\users\(user_id):application\json:api-config" doc:id="154c57e3-63b0-4ed4-be69-5fb32e5c05eb" >
+		<flow-ref doc:name="Ref to patch-update-user-handler-subflow" doc:id="ca4b99f1-6dcd-4e65-8600-b6c47a985c70" name="patch-update-user-handler-subflow" />
+	</flow>
 </mule>

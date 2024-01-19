@@ -1,0 +1,15 @@
+#%RAML 1.0 Trait
+
+queryParameters:
+  offset:
+    description: Determines the starting point within the collection of resource results
+    required: false
+    type: integer
+    minimum: 1
+    example: 1
+  limit:
+    description: Controls the maximum of results to return
+    required: false
+    type: integer
+    minimum: 1
+    example: 20

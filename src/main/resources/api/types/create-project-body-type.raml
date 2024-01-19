@@ -1,0 +1,28 @@
+#%RAML 1.0 DataType
+
+type: object
+properties:
+  name: string
+  repostory?: string
+  repository_global_user?: string
+  repository_global_token?: string
+  users?:
+    type: array
+    maxItems: 20
+    items:
+      type: object
+      properties:
+        id: string
+        relation_type: !include relation-type.raml
+        repository_user?: string
+        repository_token?: string
+  envs?:
+    type: array
+    maxItems: 5
+    items:
+      type: object
+      properties:
+        name: string
+        branch?: string
+        access: !include relation-type.raml
+example: !include ../examples/create-project-body-example.raml

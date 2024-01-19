@@ -1,0 +1,46 @@
+#%RAML 1.0 DataType
+
+type: object
+properties:
+  project_id: integer
+  name: string
+  owner:
+    type: object
+    properties:
+      id: string
+      username: string
+      email_address: string
+      repository_user: string
+  developers:
+    type: array
+    items:
+      type: object
+      properties:
+        id: string
+        username: string
+        email_address: string
+        repository_user: string
+  customers:
+    type: array
+    items:
+      type: object
+      properties:
+        id: string
+        username: string
+        email_address: string
+        repository_user: string
+  repository: string
+  repository_global_user: string
+  envs:
+    type: array
+    items:
+      type: object
+      properties:
+        name: string
+        branch: string
+        bucket: string
+        access: !include relation-type.raml
+        www: string
+  created_at: datetime
+  updated_at: datetime
+example: !include ../examples/get-project-details-example.raml

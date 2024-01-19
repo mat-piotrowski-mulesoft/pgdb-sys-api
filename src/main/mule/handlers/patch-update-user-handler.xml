@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:validation="http://www.mulesoft.org/schema/mule/validation" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/validation http://www.mulesoft.org/schema/mule/validation/current/mule-validation.xsd">
+	<sub-flow name="patch-update-user-handler-subflow" doc:id="928df5ef-40bf-46e7-b6fc-2711ac3ee4ae" >
+		<ee:transform doc:name="Save input data" doc:id="054b70a6-84c7-4b20-a1cf-2c485a9290f0" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="inputPayload" ><![CDATA[%dw 2.0
+output application/java
+---
+payload]]></ee:set-variable>
+				<ee:set-variable variableName="userId" ><![CDATA[%dw 2.0
+output application/java
+---
+attributes.uriParams.user_id]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<flow-ref doc:name="Ref to db:update-user-flow" doc:id="d716bb55-35ca-4a84-8f08-78a5f18eceed" name="db:update-user-flow"/>
+		<validation:is-true doc:name="Affected rows validation" doc:id="0e22e7b7-7da4-4cf4-866a-c62c1241ec44" expression="#[vars.dbResponse.affectedRows == 1]" message="PGDB-S-00001">
+			<error-mapping targetType="APP:EXCEPTION_HANDLING" />
+		</validation:is-true>
+		<ee:transform doc:name="Set response" doc:id="049aab58-c3c8-447c-a369-5b9d4e56d251" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	userId: vars.userId
+}]]></ee:set-payload>
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="httpStatus" ><![CDATA[%dw 2.0
+output application/java
+---
+200]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+	</sub-flow>
+</mule>
