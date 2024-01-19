@@ -2,7 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.itsnooge.mule.app</groupId>
+	<groupId>com.matpio.mule.app</groupId>
 	<artifactId>pgdb-sys-api</artifactId>
 	<version>1.0.0-SNAPSHOT</version>
 	<packaging>mule-application</packaging>
@@ -15,7 +15,7 @@
 
 		<app.runtime>4.5</app.runtime>
 		<mule.maven.plugin.version>4.0.0</mule.maven.plugin.version>
-		<common-standard-library.version>1.0.0-SNAPSHOT-2</common-standard-library.version>
+		<common-standard-library.version>1.0.0</common-standard-library.version>
 	</properties>
 
 	<build>
@@ -83,12 +83,6 @@
 			<classifier>mule-plugin</classifier>
 		</dependency>
 		<dependency>
-			<groupId>com.itsnooge.mule.module</groupId>
-			<artifactId>common-standard-library</artifactId>
-			<version>${common-standard-library.version}</version>
-			<classifier>mule-plugin</classifier>
-		</dependency>
-		<dependency>
 			<groupId>com.mulesoft.modules</groupId>
 			<artifactId>mule-secure-configuration-property-module</artifactId>
 			<version>1.2.6</version>
@@ -111,6 +105,14 @@
 			<version>2.0.5</version>
 			<classifier>mule-plugin</classifier>
 		</dependency>
+		
+		<!-- INTERNAL DEPENDECIES -->
+		<dependency>
+			<groupId>com.matpio.mule.module</groupId>
+			<artifactId>common-standard-library</artifactId>
+			<version>${common-standard-library.version}</version>
+			<classifier>mule-plugin</classifier>
+		</dependency>
 	</dependencies>
 
 	<repositories>
@@ -127,9 +129,9 @@
 			<layout>default</layout>
 		</repository>
 		<repository>
-			<id>github</id>
-			<name>GitHub mat-piotrowski Apache Maven Packages</name>
-			<url>https://maven.pkg.github.com/mat-piotrowski-mulesoft/maven-repository</url>
+			<id>github-public</id>
+			<name>GitHub public maven repository</name>
+			<url>https://maven.pkg.github.com/mat-piotrowski-mulesoft/maven-repository-public</url>
 		</repository>
 	</repositories>
 
@@ -144,9 +146,9 @@
 			</snapshots>
 		</pluginRepository>
 		<pluginRepository>
-			<id>github</id>
-			<name>GitHub mat-piotrowski Apache Maven Packages</name>
-			<url>https://maven.pkg.github.com/mat-piotrowski-mulesoft/maven-repository</url>
+			<id>github-public</id>
+			<name>GitHub public maven repository</name>
+			<url>https://maven.pkg.github.com/mat-piotrowski-mulesoft/maven-repository-public</url>
 		</pluginRepository>
 	</pluginRepositories>
 
